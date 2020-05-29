@@ -21,7 +21,8 @@ public class Test1 {
 		UserService userService = (UserService) applicationContext.getBean("userService");
 		System.out.println("userService.getUser()---***"+userService.getUser());
 		System.out.println("userService.getUser()---***"+userService.getUseList());
-		System.out.println("测试git上传");
+		System.out.println("测试git上传-微星");
+		System.out.println("测试git上传-RedminBook");
 	}
 
 }
