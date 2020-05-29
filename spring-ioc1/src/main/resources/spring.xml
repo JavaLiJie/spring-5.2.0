@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--bean实体-->
+	<bean name="user" class="com.bean.User"></bean>
+	<!--<bean id="userService" class="com.service.UserService">
+		&lt;!&ndash;set注入的属性bean&ndash;&gt;
+		<property name="user" ref="user"></property>
+		&lt;!&ndash;构造函数注入的属性bean&ndash;&gt;
+		<constructor-arg ref="user"></constructor-arg>
+	</bean>-->
+	<!--利用autowire属性改为自动装配-->
+	<bean id="userService" class="com.service.UserService" autowire="constructor"></bean>
+</beans>
