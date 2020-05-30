@@ -413,6 +413,7 @@ class ConstructorResolver {
 		}
 		else {
 			// It's a static factory method on the bean class.
+			//静态工厂方法bean-获取bean的class路径
 			if (!mbd.hasBeanClass()) {
 				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
 						"bean definition declares neither a bean class nor a factory-bean reference");
