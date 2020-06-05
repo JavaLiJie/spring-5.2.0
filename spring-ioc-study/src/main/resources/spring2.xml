@@ -3,6 +3,6 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<bean id="testBean1" class="ccom.bean.TestBean1"/>
-<bean id="testBean2" class="ccom.bean.TestBean1"/>
+<!--<bean id="testBean1" class="ccom.bean.TestBean1"/>
+<bean id="testBean2" class="ccom.bean.TestBean1"/>-->
 </beans>

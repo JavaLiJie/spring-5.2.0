@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  **/
 
-/*@Component*/
+//@Component
 public class User {
 private String name;
 private String age;
 
 	public User() {
-		System.out.println("无参构造执行");
+		System.out.println("User无参构造执行");
 	}
 }

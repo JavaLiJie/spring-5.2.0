@@ -26,7 +26,7 @@ public class MyBeanFactoryPostProcessor implements BeanDefinitionRegistryPostPro
 	}
 
 	@Override
-	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+		public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 		/*GenericBeanDefinition beanDefinition = (GenericBeanDefinition) beanFactory.getBeanDefinition("user");
 		beanDefinition.setBeanClassName("com.bean.NewUser");*/
 	}

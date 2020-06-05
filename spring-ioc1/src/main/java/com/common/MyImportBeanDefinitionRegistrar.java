@@ -14,7 +14,6 @@ public class MyImportBeanDefinitionRegistrar implements ImportBeanDefinitionRegi
       RootBeanDefinition rootBeanDefinition = new RootBeanDefinition(User.class);
       //对bean的属性进行设置
       rootBeanDefinition.getPropertyValues().addPropertyValue("name","xiaoming");
-      // 注册到容器
-      registry.registerBeanDefinition("fox",rootBeanDefinition);
+
    }
 }

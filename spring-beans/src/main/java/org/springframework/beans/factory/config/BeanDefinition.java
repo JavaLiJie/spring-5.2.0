@@ -209,6 +209,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * Return a factory method, if any.
+	 * @bean类型的方法bean的创建
 	 */
 	@Nullable
 	String getFactoryMethodName();

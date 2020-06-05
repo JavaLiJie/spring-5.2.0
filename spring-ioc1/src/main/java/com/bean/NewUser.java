@@ -31,7 +31,7 @@ public class NewUser {
 	}
 
 	public NewUser() {
-		System.out.println("无参构造执行");
+		System.out.println("NewUser无参构造执行");
 	}
 
 }
