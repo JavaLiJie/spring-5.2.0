@@ -23,7 +23,7 @@ public class Test {
 	public static void main(String[] args) {
 		ResourceLoader resourceLoader=new DefaultResourceLoader();
 		Resource resource = resourceLoader.getResource("spring1.xml");
-		//获取核心类DefaultListableBeanFactory：
+		//获取核心类DefaultListableBeanFactory
 		DefaultListableBeanFactory registryBeanFactory= new DefaultListableBeanFactory();
 		BeanDefinitionReader beanDefinitionReader=new XmlBeanDefinitionReader(registryBeanFactory);
 		beanDefinitionReader.loadBeanDefinitions(resource);

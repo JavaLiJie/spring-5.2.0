@@ -1,5 +1,10 @@
 package com.common;
 
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanNameGenerator;
+import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.type.AnnotationMetadata;
+
 /**
  * @program: spring
  * @ClassName MyImportBeanDefinitionRegistrar
@@ -9,7 +14,11 @@ package com.common;
  * @Version 1.0
  **/
 
-public class MyImportBeanDefinitionRegistrar {
+public class MyImportBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
 
+	@Override
+	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry, BeanNameGenerator importBeanNameGenerator) {
+		
+	}
 }
