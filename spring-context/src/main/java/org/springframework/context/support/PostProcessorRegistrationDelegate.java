@@ -106,7 +106,7 @@ final class PostProcessorRegistrationDelegate {
 			currentRegistryProcessors.clear();
 
 			// Next, invoke the BeanDefinitionRegistryPostProcessors that implement Ordered.
-			//再去容器中拿BeanDefinitionRegistryPostProcessors
+			//再去容器中拿实现了Ordered的BeanDefinitionRegistryPostProcessors
 			postProcessorNames = beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
 				//判断这个后置处理器是否实现了Ordered指定加载顺序
@@ -142,9 +142,13 @@ final class PostProcessorRegistrationDelegate {
 			}
 
 			// Now, invoke the postProcessBeanFactory callback of all processors handled so far.
-			//调用org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanFactory
-			//完成对@Cconfiguration修饰的配置类进行动态增强--通过字节码技术进行spring的CGLIB的动态代理
+			//下面两部都是
+			// 调用ConfigurationClassPostProcessor.postProcessBeanFactory方法
+			//完成对@Configuration修饰的配置类进行动态增强--通过字节码技术进行spring的CGLIB的动态代理
+
+			//调用用户自定义的实现注册器的后置处理器所实现的后置处理的方法
 			invokeBeanFactoryPostProcessors(registryProcessors, beanFactory);
+			//调用用户自定义的没有实现注册器的后置处理器所实现的后置处理的方法
 			invokeBeanFactoryPostProcessors(regularPostProcessors, beanFactory);
 		}
 

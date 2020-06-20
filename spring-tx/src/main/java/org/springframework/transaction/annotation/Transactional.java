@@ -100,6 +100,7 @@ public @interface Transactional {
 	 * @see org.springframework.transaction.interceptor.TransactionAttribute#getIsolationLevel()
 	 * @see org.springframework.transaction.support.AbstractPlatformTransactionManager#setValidateExistingTransaction
 	 */
+	//设置事务的隔离级别
 	Isolation isolation() default Isolation.DEFAULT;
 
 	/**
@@ -140,6 +141,7 @@ public @interface Transactional {
 	 * @see #rollbackForClassName
 	 * @see org.springframework.transaction.interceptor.DefaultTransactionAttribute#rollbackOn(Throwable)
 	 */
+	//指定能触发事务回滚的异常类型-数据类型-->说明可以指定多种
 	Class<? extends Throwable>[] rollbackFor() default {};
 
 	/**
@@ -173,6 +175,7 @@ public @interface Transactional {
 	 * @see #noRollbackForClassName
 	 * @see org.springframework.transaction.interceptor.DefaultTransactionAttribute#rollbackOn(Throwable)
 	 */
+	//指定不回滚事务的异常类型
 	Class<? extends Throwable>[] noRollbackFor() default {};
 
 	/**

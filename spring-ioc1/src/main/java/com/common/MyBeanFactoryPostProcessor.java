@@ -7,6 +7,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
+import org.springframework.stereotype.Component;
 
 /**
  * @program: spring
@@ -17,24 +18,13 @@ import org.springframework.beans.factory.support.GenericBeanDefinition;
  * @Version 1.0
  **/
 
-public class MyBeanFactoryPostProcessor implements BeanDefinitionRegistryPostProcessor {
-	@Override
-	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-
-		GenericBeanDefinition beanDefinition = (GenericBeanDefinition) registry.getBeanDefinition("user");
-		beanDefinition.setBeanClassName("com.bean.NewUser");
-	}
+@Component
+public class MyBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
 	@Override
-		public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-		/*GenericBeanDefinition beanDefinition = (GenericBeanDefinition) beanFactory.getBeanDefinition("user");
-		beanDefinition.setBeanClassName("com.bean.NewUser");*/
-	}
-
-
-	/*@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-		GenericBeanDefinition beanDefinition = (GenericBeanDefinition) beanFactory.getBeanDefinition("user");
-		beanDefinition.setBeanClassName("com.bean.NewUser");
-	}*/
+		//修改普通bean的beanclass，来修改bean的类型
+		BeanDefinition user = beanFactory.getBeanDefinition("user");
+		user.setBeanClassName("com.bean.NewUser");
+	}
 }

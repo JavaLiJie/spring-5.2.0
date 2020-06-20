@@ -1,7 +1,5 @@
-import com.bean.NewUser;
-import com.bean.User;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import com.AppConfig;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * @program: spring
@@ -14,9 +12,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Test3 {
 	public static void main(String[] args) {
-		ApplicationContext applicationContext=new ClassPathXmlApplicationContext("spring.xml");
-		User user = (User) applicationContext.getBean("user");
-		System.out.println(user);
+		//ApplicationContext applicationContext=new ClassPathXmlApplicationContext("spring.xml");
+		AnnotationConfigApplicationContext applicationContext=new AnnotationConfigApplicationContext(AppConfig.class);
+		String[] beanDefinitionNames = applicationContext.getBeanDefinitionNames();
+		for (String beanDefinitionName : beanDefinitionNames) {
+			System.out.println(beanDefinitionName);
+		}
+		System.out.println(applicationContext.getBean("user"));
 	}
 
 }

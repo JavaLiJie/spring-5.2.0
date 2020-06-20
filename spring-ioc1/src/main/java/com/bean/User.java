@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  **/
 
-//@Component
+@Component
 public class User {
 private String name;
 private String age;

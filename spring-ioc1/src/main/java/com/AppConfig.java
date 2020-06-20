@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Import;
 @Import(MyImportSelector.class)//通过import将选择器注册到spring
 public class AppConfig {
 
-	@Bean//方法bean，注册时没有beanclass，而是通过factorymethod属性调用getbean
-	public User user() {return new User();}
+	/*@Bean//方法bean，注册时没有beanclass，而是通过factorymethod属性调用getbean
+	public User user() {return new User();}*/
 
 }

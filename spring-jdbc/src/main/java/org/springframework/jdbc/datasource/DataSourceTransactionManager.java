@@ -234,6 +234,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	}
 
 	@Override
+	//获取事务
 	protected Object doGetTransaction() {
 		DataSourceTransactionObject txObject = new DataSourceTransactionObject();
 		txObject.setSavepointAllowed(isNestedTransactionAllowed());
@@ -281,6 +282,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 				if (logger.isDebugEnabled()) {
 					logger.debug("Switching JDBC Connection [" + con + "] to manual commit");
 				}
+				//关闭自动提交
 				con.setAutoCommit(false);
 			}
 

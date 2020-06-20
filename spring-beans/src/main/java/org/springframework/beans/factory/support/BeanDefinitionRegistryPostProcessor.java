@@ -40,6 +40,14 @@ public interface BeanDefinitionRegistryPostProcessor extends BeanFactoryPostProc
 	 * @param registry the bean definition registry used by the application context
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 */
+	/**
+	 * 对应用程序上下文的内部bean进行初始化 beanDefinition 的注册。
+	 * 所有常规bean定义都将被加载，但是不被实例化。
+	 * 这允许进一步添加下一个后处理阶段开始之前的 beanDefinition。
+	 * @param registry
+	 * @throws BeansException
+	 */
 	void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException;
 
+	//通过该方法的registry，对beanDefinition操作
 }

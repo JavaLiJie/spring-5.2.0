@@ -15,12 +15,12 @@ import java.util.List;
  * @Version 1.0
  **/
 
-@Service
+//@Service
 public class UserService {
 	@Autowired
 	private List<User> userList;
 
-	@Autowired
+	//@Autowired
 	private User user;
 
 	public UserService(User user) {

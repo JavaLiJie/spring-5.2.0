@@ -185,7 +185,7 @@ class ConfigurationClassParser {
 			}
 		}
 
-		//deferred:延迟
+		//deferred:延迟  延迟加载的功能：应用场景-springboot中自动配置类的注册
 		this.deferredImportSelectorHandler.process();
 	}
 
@@ -761,6 +761,7 @@ class ConfigurationClassParser {
 			}
 		}
 
+		//延迟加载的功能：应用场景-springboot中自动配置类的注册
 		public void process() {
 			List<DeferredImportSelectorHolder> deferredImports = this.deferredImportSelectors;
 			this.deferredImportSelectors = null;
