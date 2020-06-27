@@ -273,23 +273,37 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
 		Set<BeanDefinitionHolder> beanDefinitions = new LinkedHashSet<>();
 		for (String basePackage : basePackages) {
-			//根据包名，去扫描包
+			//根据包名，去扫描包 找到指定路径下所有被@Component修饰的类
+			// (注不要忘了@Service。。。。修饰也是，因为@Service接口是被@Component修饰的)
 			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
 			for (BeanDefinition candidate : candidates) {
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
 				candidate.setScope(scopeMetadata.getScopeName());
 				String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
 				if (candidate instanceof AbstractBeanDefinition) {
+					/*初始化bean设置为默认值（ClassPathBeanDefinitionScanner的BeanDefinitionDefaults，
+					 *eg:setAutowireMode(defaults.getAutowireMode());），
+					 *比如lazyInit，AutowireMode，DependencyCheck(配置的<bean depends-on="..."/>)，
+					 *InitMethodName等基础属性。*/
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
 				}
 				if (candidate instanceof AnnotatedBeanDefinition) {
+					/**
+					 * 根据beanDefinition及其元数据metadata，获取这个beanDefinition的基础属性的注解信息，
+					 * 比如Lazy，@Primary(配置多个bean时，指定默认优先选择注入哪个)，
+					 * DependsOn（控制bean加载顺序--具体详解写在DependsOn源码）
+					 * Role（bean的角色，0是用户自定义，1是外部配置的bean，2是spring内部bean），Description(bean的描述)*/
 					AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition) candidate);
 				}
+				//校验 当前bean是否需要被注册，是否不与已存在的bean冲突,或不是@component、@service等注解来显示注入的bean
 				if (checkCandidate(beanName, candidate)) {
+					//校验通过的,通过beanName和beanDefinition创建beanDefinitionHolder
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
+					//设置动态代理的类型：默认，无动态代理，jdk，cglib
 					definitionHolder =
 							AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 					beanDefinitions.add(definitionHolder);
+					//注册 beanDefinition
 					registerBeanDefinition(definitionHolder, this.registry);
 				}
 			}

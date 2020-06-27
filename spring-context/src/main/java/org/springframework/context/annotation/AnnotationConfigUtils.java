@@ -272,7 +272,7 @@ public abstract class AnnotationConfigUtils {
 			return definition;
 		}
 		boolean proxyTargetClass = scopedProxyMode.equals(ScopedProxyMode.TARGET_CLASS);
-		return ScopedProxyCreator.createScopedProxy(definition, registry, proxyTargetClass);
+		return ScopedProxyCreator.createScopedProxy(definition, registry, scopedProxyMode.equals(ScopedProxyMode.TARGET_CLASS));
 	}
 
 	@Nullable

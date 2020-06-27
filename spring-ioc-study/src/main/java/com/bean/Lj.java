@@ -1,5 +1,7 @@
 package com.bean;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @program: spring
  * @ClassName Lj
@@ -9,6 +11,7 @@ package com.bean;
  * @Version 1.0
  **/
 
+@Component
 public class Lj {
 private String name;
 private String age;

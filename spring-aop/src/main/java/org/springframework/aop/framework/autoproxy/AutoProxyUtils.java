@@ -43,6 +43,7 @@ public abstract class AutoProxyUtils {
 	 * @see #shouldProxyTargetClass
 	 */
 	public static final String PRESERVE_TARGET_CLASS_ATTRIBUTE =
+			//AutoProxyUtils.preserveTargetClass
 			Conventions.getQualifiedAttributeName(AutoProxyUtils.class, "preserveTargetClass");
 
 	/**

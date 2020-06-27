@@ -131,25 +131,36 @@ class ConfigurationClassBeanDefinitionReader {
 		if (trackedConditionEvaluator.shouldSkip(configClass)) {
 			String beanName = configClass.getBeanName();
 			if (StringUtils.hasLength(beanName) && this.registry.containsBeanDefinition(beanName)) {
-				this.registry.removeBeanDefinition(beanName);
+				this.registry.removeBeanDefinition(configClass.getBeanName());
 			}
 			this.importRegistry.removeImportingClass(configClass.getMetadata().getClassName());
 			return;
 		}
 
+		//判断是不是Import类型
 		if (configClass.isImported()) {
+			/**
+			 * 注册实现ImportSelector的类，执行方法，获取需要注册的bean，并注册到容器
+			 * 比如自定义一个类实现ImportSelector,返回需要另外导入的bean
+			 * 比如AdviceModeImportSelector通过AnnotationMetadata获取mode的值，作为bean的adviceMod,
+			 * 实现类就可以根据mode来对要返回的bean进行mode对应的类型增强：TransactionManagementConfigurationSelector类就是根据参数adviceMode来判断对返回结果通过CGLIB还是JDK动态代理进行增强
+			 */
 			registerBeanDefinitionForImportedConfigurationClass(configClass);
 		}
+		//加载注册@bean修饰的方法bean到容器
 		for (BeanMethod beanMethod : configClass.getBeanMethods()) {
 			loadBeanDefinitionsForBeanMethod(beanMethod);
 		}
-
+		//加载@ImportedResources指定配置文件所配置的bean，并注册到容器
 		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
+		//实现importBeanDefinitionRegister接口的,实现registerBeanDefinitions方法,
+		//通过BeanDefinitionRegistry进行自定义注册beanDefinition
 		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
 	}
 
 	/**
 	 * Register the {@link Configuration} class itself as a bean definition.
+	 * 执行实现importselector的类重新实现的selectImports方法，并将返回的需要导入的beanName集合注册到容器中
 	 */
 	private void registerBeanDefinitionForImportedConfigurationClass(ConfigurationClass configClass) {
 		AnnotationMetadata metadata = configClass.getMetadata();
@@ -234,7 +245,7 @@ class ConfigurationClassBeanDefinitionReader {
 		if (metadata instanceof StandardMethodMetadata) {
 			beanDef.setResolvedFactoryMethod(((StandardMethodMetadata) metadata).getIntrospectedMethod());
 		}
-
+		//设置AutowireMode=3
 		beanDef.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
 		beanDef.setAttribute(org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor.
 				SKIP_REQUIRED_CHECK_ATTRIBUTE, Boolean.TRUE);
@@ -245,21 +256,22 @@ class ConfigurationClassBeanDefinitionReader {
 		if (autowire.isAutowire()) {
 			beanDef.setAutowireMode(autowire.value());
 		}
-
+		//是否是自动装配的候选
 		boolean autowireCandidate = bean.getBoolean("autowireCandidate");
 		if (!autowireCandidate) {
 			beanDef.setAutowireCandidate(false);
 		}
-
+		//初始化时一定执行的方法
 		String initMethodName = bean.getString("initMethod");
 		if (StringUtils.hasText(initMethodName)) {
 			beanDef.setInitMethodName(initMethodName);
 		}
-
+		//销毁时一定执行的方法
 		String destroyMethodName = bean.getString("destroyMethod");
 		beanDef.setDestroyMethodName(destroyMethodName);
 
 		// Consider scoping
+		//设置ScopedProxyMode
 		ScopedProxyMode proxyMode = ScopedProxyMode.NO;
 		AnnotationAttributes attributes = AnnotationConfigUtils.attributesFor(metadata, Scope.class);
 		if (attributes != null) {
@@ -271,6 +283,7 @@ class ConfigurationClassBeanDefinitionReader {
 		}
 
 		// Replace the original bean definition with the target one, if necessary
+		//如有必要，将原始bean定义替换为目标bean定义
 		BeanDefinition beanDefToRegister = beanDef;
 		if (proxyMode != ScopedProxyMode.NO) {
 			BeanDefinitionHolder proxyDef = ScopedProxyCreator.createScopedProxy(

@@ -12,8 +12,9 @@ import org.springframework.context.annotation.Configuration;
  * @Version 1.0
  **/
 
-@ComponentScan("com")//将service层加载到容器中
+@ComponentScan("com.bean")//将service层加载到容器中
 @Configuration//将这个类作为配置类
 public class AppConfig1 {
+
 
 }

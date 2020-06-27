@@ -39,9 +39,13 @@ import java.lang.annotation.Target;
  * with {@link Bean}.
  *
  * <p>Using {@link DependsOn} at the class level has no effect unless component-scanning
- * is being used. If a {@link DependsOn}-annotated class is declared via XML,
+ * is being used.如果没有配置componentscan的包扫描，则无效
+ * If a {@link DependsOn}-annotated class is declared via XML,
+ * 如果这个bean是xml配置的，@DependsOn将被忽略，只能用<bean depends-on="..."/>才起作用
  * {@link DependsOn} annotation metadata is ignored, and
  * {@code <bean depends-on="..."/>} is respected instead.
+ *@Dependson注解是在另外一个实例创建之后才创建当前实例，也就是，最终两个实例都会创建，只是顺序不一样-->指定bean加载顺序
+ *@ConditionalOnBean注解是只有当另外一个实例存在时，才创建，否则不创建，也就是，最终有可能两个实例都创建了，有可能只创建了一个实例，也有可能一个实例都没创建
  *
  * @author Juergen Hoeller
  * @since 3.0

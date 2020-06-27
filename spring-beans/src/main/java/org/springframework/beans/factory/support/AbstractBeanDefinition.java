@@ -1087,7 +1087,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 				((BeanDefinitionResource) this.resource).getBeanDefinition() : null);
 	}
 
-	/**
+	/**验证beanDefinition
 	 * Validate this bean definition.
 	 * @throws BeanDefinitionValidationException in case of validation failure
 	 */
@@ -1100,7 +1100,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 “工厂方法必须创建具体的bean实例”*/
 		if (hasBeanClass()) {
 			//*验证并准备为该bean定义的方法覆盖。
-			//检查是否存在具有指定名称的方法
+				//检查是否存在具有指定名称的方法
 			prepareMethodOverrides();
 		}
 	}

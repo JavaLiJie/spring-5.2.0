@@ -856,6 +856,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 		// Trigger initialization of all non-lazy singleton beans...
 		for (String beanName : beanNames) {
+			//合并转换beanDefinition
+			/**
+			 * 因为不同的bean会有不同类型的beanDefinition,
+			 * 到这里就需要全部统一一下，转成RootBeanDefinition
+			 */
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
 			//满足 非抽象类，单例对象，非懒加载，就通过getBean
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
@@ -951,14 +956,17 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 */
 	protected void resetBeanDefinition(String beanName) {
 		// Remove the merged bean definition for the given bean, if already created.
+		//移除 这个bean的合并beanDefinition（如果已经创建）。
 		clearMergedBeanDefinition(beanName);
 
 		// Remove corresponding bean from singleton cache, if any. Shouldn't usually
 		// be necessary, rather just meant for overriding a context's default beans
 		// (e.g. the default StaticMessageSource in a StaticApplicationContext).
+		//从单例缓存中移除相应的bean（如果有的话）
 		destroySingleton(beanName);
 
 		// Notify all post-processors that the specified bean definition has been reset.
+		//通知所有后处理器指定的bean定义已重置。
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			if (processor instanceof MergedBeanDefinitionPostProcessor) {
 				((MergedBeanDefinitionPostProcessor) processor).resetBeanDefinition(beanName);
@@ -966,6 +974,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 
 		// Reset all bean definitions that have the given bean as parent (recursively).
+		//重置所有将 这个bean作为父bean的beanDefinition（递归地）
 		for (String bdName : this.beanDefinitionNames) {
 			if (!beanName.equals(bdName)) {
 				BeanDefinition bd = this.beanDefinitionMap.get(bdName);
@@ -1020,7 +1029,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 			//判断bean的定义级别
 			else if (existingDefinition.getRole() < beanDefinition.getRole()) {
-				//低级覆盖高级角色的情况
+				//低级角色被高级角色覆盖的情况
+				//0被1,2覆盖
 				// e.g. was ROLE_APPLICATION, now overriding with ROLE_SUPPORT or ROLE_INFRASTRUCTURE
 				if (logger.isInfoEnabled()) {
 					logger.info("Overriding user-defined bean definition for bean '" + beanName +

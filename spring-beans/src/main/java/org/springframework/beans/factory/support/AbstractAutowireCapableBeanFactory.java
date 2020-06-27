@@ -494,6 +494,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// Prepare method overrides.
+		//准备方法重写
 		try {
 			mbdToUse.prepareMethodOverrides();
 		}
@@ -518,6 +519,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		try {
+			//第二次调用后置处理器，获取构造器
 			Object beanInstance = doCreateBean(beanName, mbdToUse, args);
 			if (logger.isTraceEnabled()) {
 				logger.trace("Finished creating instance of bean '" + beanName + "'");
@@ -553,7 +555,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throws BeanCreationException {
 
 		// Instantiate the bean.
-		//BeanWrapper包装类
+			//BeanWrapper包装类
 		BeanWrapper instanceWrapper = null;
 		if (mbd.isSingleton()) {
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
@@ -571,9 +573,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// Allow post-processors to modify the merged bean definition.
+		//允许后置处理器修改合并beanDefinition
 		synchronized (mbd.postProcessingLock) {
 			if (!mbd.postProcessed) {
 				try {
+					//第三次后置处理器调用
 					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
 				}
 				catch (Throwable ex) {
@@ -586,6 +590,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		// Eagerly cache singletons to be able to resolve circular references
 		// even when triggered by lifecycle interfaces like BeanFactoryAware.
+		//缓存singleton，以便能够解析循环引用，即使是由生命周期接口（如BeanFactoryAware）触发时也是如此。
 		boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
 				isSingletonCurrentlyInCreation(beanName));
 		if (earlySingletonExposure) {
@@ -596,7 +601,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
 
-		// Initialize the bean instance.
+		// Initialize the bean instance.初始化bean实例
 		Object exposedObject = bean;
 		try {
 			//为bean的属性进行填充
@@ -643,6 +648,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		// Register bean as disposable.
 		try {
+			//将bean注册为可销毁的
 			registerDisposableBeanIfNecessary(beanName, bean, mbd);
 		}
 		catch (BeanDefinitionValidationException ex) {
@@ -1109,6 +1115,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	/**
 	 * Apply before-instantiation post-processors, resolving whether there is a
 	 * before-instantiation shortcut for the specified bean.
+	 * 解析指定bean是否存在实例化的捷径
 	 * @param beanName the name of the bean
 	 * @param mbd the bean definition for the bean
 	 * @return the shortcut-determined bean instance, or {@code null} if none
@@ -1118,6 +1125,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object bean = null;
 		if (!Boolean.FALSE.equals(mbd.beforeInstantiationResolved)) {
 			// Make sure bean class is actually resolved at this point.
+			//要确保在这里确实解析了bean
 			if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
 				Class<?> targetType = determineTargetType(beanName, mbd);
 				if (targetType != null) {
@@ -1172,7 +1180,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 */
 	protected BeanWrapper createBeanInstance(String beanName, RootBeanDefinition mbd, @Nullable Object[] args) {
 		// Make sure bean class is actually resolved at this point.
-		//确保bean确实已被解析
+		//确保bean确实已被解析，拿到beanName对应的beanClass
 		Class<?> beanClass = resolveBeanClass(mbd, beanName);
 
 		//判断方法是否是共有的
@@ -1197,12 +1205,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// 一个类可能有多个构造器，所以Spring得根据参数个数、类型确定需要调用的构造器
 		// 在使用构造器创建实例后，Spring会将解析过后确定下来的构造器或工厂方法保存在缓存中，
 		// 避免再次创建相同bean时再次解析
+
 		boolean resolved = false;
 		boolean autowireNecessary = false;
 		if (args == null) {
 			//constructorArgumentLock：下面四种构造函数的锁
 			synchronized (mbd.constructorArgumentLock) {
-				//缓存中有已解析的构造函数或者工厂方法
+				//缓存中有已解析的构造函数或者工厂方法--第一次创建时为null
 				if (mbd.resolvedConstructorOrFactoryMethod != null) {
 					resolved = true;
 					//构造函数参数标记是否已解析的标记
@@ -1212,12 +1221,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 		if (resolved) {
 			if (autowireNecessary) {
-				//如果是已解析的构造方法或工厂方法
+				//如果是已解析的构造方法或工厂方法--底层最后会通过AutowireUtils.sortConstructors(candidates);对构造函数进行排序
 				return autowireConstructor(beanName, mbd, null, null);
 			}
 			else {
 				// 默认无参构造器
-				return instantiateBean(beanName, mbd);
+					return instantiateBean(beanName, mbd);
 			}
 		}
 
@@ -1387,6 +1396,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	protected BeanWrapper autowireConstructor(
 			String beanName, RootBeanDefinition mbd, @Nullable Constructor<?>[] ctors, @Nullable Object[] explicitArgs) {
 
+		//对构造函数进行排序
 		return new ConstructorResolver(this).autowireConstructor(beanName, mbd, ctors, explicitArgs);
 	}
 
@@ -1480,6 +1490,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		if (pvs != null) {
+			//propertyValues属性填充 ，包括AutowireMode方式注入的bean
 			applyPropertyValues(beanName, mbd, bw, pvs);
 		}
 	}
@@ -1676,6 +1687,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * Apply the given property values, resolving any runtime references
 	 * to other beans in this bean factory. Must use deep copy, so we
 	 * don't permanently modify this property.
+	 * 应用给定的属性值，解析任何运行时引用给这个bean factory的其他bean。
+	 * 必须使用深度克隆，因此不用永久性的修改这个属性
 	 * @param beanName the bean name passed for better exception information
 	 * @param mbd the merged bean definition
 	 * @param bw the BeanWrapper wrapping the target object
@@ -1848,6 +1861,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		return wrappedBean;
 	}
 
+	/**
+	 * 调用Aware方法，根据bean的类型分别设置beanName、BeanClassLoader、BeanFactory属性
+	 * @param beanName
+	 * @param bean
+	 */
 	private void invokeAwareMethods(final String beanName, final Object bean) {
 		if (bean instanceof Aware) {
 			if (bean instanceof BeanNameAware) {
