@@ -269,7 +269,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			if (isPrototypeCurrentlyInCreation(beanName)) {
 				throw new BeanCurrentlyInCreationException(beanName);
 			}
-
+			//检查父工厂有没有，
+			//如果有就直接调用getBean获取bean并返回
 			// Check if bean definition exists in this factory.
 			BeanFactory parentBeanFactory = getParentBeanFactory();
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {

@@ -270,10 +270,11 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 	 * @since 4.3.2
 	 * @see BeanFactory#getBean(String)
 	 */
+	//第六次调用后置处理器，填充属性
 	public Object resolveCandidate(String beanName, Class<?> requiredType, BeanFactory beanFactory)
 			throws BeansException {
-
-		return beanFactory.getBean(beanName);
+			//解析候选bean：从容器中获取候选bean
+			return beanFactory.getBean(beanName);
 	}
 
 
