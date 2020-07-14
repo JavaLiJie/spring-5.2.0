@@ -64,6 +64,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates no externally defined autowiring. Note that
 	 * BeanFactoryAware etc and annotation-driven injection will still be applied.
+	 * 指示没有外部定义的自动装配的常数。 但是，BeanFactoryAware等和注释驱动的注入仍将应用
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
@@ -88,7 +89,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 */
 	int AUTOWIRE_BY_TYPE = 2;
 
-	/**
+	/**贪婪模式，可以通过构造函数进行多次创建对象
 	 * Constant that indicates autowiring the greediest constructor that
 	 * can be satisfied (involves resolving the appropriate constructor).
 	 * @see #createBean
@@ -108,6 +109,8 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	int AUTOWIRE_AUTODETECT = 4;
 
 	/**
+	 * 在初始化现有Bean实例时的“原始实例”约定的后缀：要附加到完全限定的Bean类名之后，
+	 * 例如“com.mypackage.MyClass.ORIGINAL”，以便强制返回给定实例，即没有代理等。
 	 * Suffix for the "original instance" convention when initializing an existing
 	 * bean instance: to be appended to the fully-qualified bean class name,
 	 * e.g. "com.mypackage.MyClass.ORIGINAL", in order to enforce the given instance

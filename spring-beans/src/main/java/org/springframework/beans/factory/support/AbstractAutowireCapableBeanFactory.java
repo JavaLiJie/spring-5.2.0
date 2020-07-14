@@ -562,8 +562,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 		if (instanceWrapper == null) {
 			/*
-			* 第二次调用后置处理器
-			* ...*/
+			* 解析bean对应的beanFactory，bean构造器等信息，并放到缓存中，
+			* 下次调用时会进入第二次后置处理器逻辑中，直接拿缓存的构造器
+			*/
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 		final Object bean = instanceWrapper.getWrappedInstance();
@@ -590,7 +591,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		// Eagerly cache singletons to be able to resolve circular references
 		// even when triggered by lifecycle interfaces like BeanFactoryAware.
-		//缓存singleton，以便能够解析循环引用，即使是由生命周期接口（如BeanFactoryAware）触发时也是如此。
+		//缓存 singleton，以便能够解析循环引用，即使是由生命周期接口（如BeanFactoryAware）触发时也是如此。
 		boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
 				isSingletonCurrentlyInCreation(beanName));
 		if (earlySingletonExposure) {
@@ -1106,7 +1107,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	protected void applyMergedBeanDefinitionPostProcessors(RootBeanDefinition mbd, Class<?> beanType, String beanName) {
 		for (BeanPostProcessor bp : getBeanPostProcessors()) {
 			if (bp instanceof MergedBeanDefinitionPostProcessor) {
+				//全部转换成统一格式的BeanPostProcessor的子类MergedBeanDefinitionPostProcessor
 				MergedBeanDefinitionPostProcessor bdp = (MergedBeanDefinitionPostProcessor) bp;
+				//调用实际的后置处理方法
 				bdp.postProcessMergedBeanDefinition(mbd, beanType, beanName);
 			}
 		}

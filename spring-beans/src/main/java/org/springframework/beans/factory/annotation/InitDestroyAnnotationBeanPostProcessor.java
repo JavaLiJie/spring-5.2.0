@@ -146,7 +146,9 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
+		//获取类的生命周期的信息，LifecycleMetadata包含初始化方法和销毁方法信息
 		LifecycleMetadata metadata = findLifecycleMetadata(beanType);
+		//将获取的类的初始化方法和销毁方法注册
 		metadata.checkConfigMembers(beanDefinition);
 	}
 
@@ -154,6 +156,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		LifecycleMetadata metadata = findLifecycleMetadata(bean.getClass());
 		try {
+			//@PostConstruct
 			metadata.invokeInitMethods(bean, beanName);
 		}
 		catch (InvocationTargetException ex) {

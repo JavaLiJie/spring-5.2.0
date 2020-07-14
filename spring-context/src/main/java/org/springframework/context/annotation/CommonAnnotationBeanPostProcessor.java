@@ -307,8 +307,11 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
+		//获取类的生命周期的信息，LifecycleMetadata包含初始化方法和销毁方法信息，将获取的类的初始化方法和销毁方法注册
 		super.postProcessMergedBeanDefinition(beanDefinition, beanType, beanName);
+		//获取类的注解信息源数据
 		InjectionMetadata metadata = findResourceMetadata(beanName, beanType, null);
+		//注册
 		metadata.checkConfigMembers(beanDefinition);
 	}
 
@@ -368,6 +371,10 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 		return metadata;
 	}
 
+	/***
+	 * 找到所要注入的类，标记有 @WebServiceRef @EJB @Resource等注解的 field和method 添加到一个list中
+	 * 以list和这个class封装成一个InjectionMetadata
+	 */
 	private InjectionMetadata buildResourceMetadata(final Class<?> clazz) {
 		if (!AnnotationUtils.isCandidateClass(clazz, resourceAnnotationTypes)) {
 			return InjectionMetadata.EMPTY;
@@ -447,8 +454,13 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			elements.addAll(0, currElements);
 			targetClass = targetClass.getSuperclass();
 		}
+		/***
+		 * 一直循环封装，直到目标类为null或者父类是Object
+		 * -->这里也就说明了如果你在一个子类有@AutoWired，@Value等注解的 field和method，
+		 * 那么会一直扫描父类，直到扫描到Object才停止
+		 */
 		while (targetClass != null && targetClass != Object.class);
-
+		//封装找到了的method和field，放到InjectionMetadata
 		return InjectionMetadata.forElements(elements, clazz);
 	}
 

@@ -604,6 +604,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 					return AUTOWIRE_BY_TYPE;
 				}
 			}
+			//int AUTOWIRE_AUTODETECT = 4;
 			return AUTOWIRE_CONSTRUCTOR;
 		}
 		else {

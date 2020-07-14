@@ -454,7 +454,10 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		}
 		return metadata;
 	}
-
+	/***
+	 * 找到所要注入的类，标记有 @Autowired 注解的 field和method 添加到一个list中
+	 * 以list和这个class封装成一个InjectionMetadata
+	 */
 	private InjectionMetadata buildAutowiringMetadata(final Class<?> clazz) {
 		if (!AnnotationUtils.isCandidateClass(clazz, this.autowiredAnnotationTypes)) {
 			return InjectionMetadata.EMPTY;
@@ -508,8 +511,13 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 			elements.addAll(0, currElements);
 			targetClass = targetClass.getSuperclass();
 		}
+		/***
+		 * 一直循环封装，直到目标类为null或者父类是Object
+		 * -->这里也就说明了如果你在一个子类有@AutoWired注解的 field和method，
+		 * 那么会一直扫描父类，直到扫描到Object才停止
+		 */
 		while (targetClass != null && targetClass != Object.class);
-
+		//封装找到了的method和field，放到InjectionMetadata
 		return InjectionMetadata.forElements(elements, clazz);
 	}
 
