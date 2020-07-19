@@ -769,7 +769,9 @@ public abstract class ReflectionUtils {
 	 * @see java.lang.reflect.Field#setAccessible
 	 */
 	@SuppressWarnings("deprecation")  // on JDK 9
+	//设置字段的访问权限为可访问的
 	public static void makeAccessible(Field field) {
+		//字段不是Public修饰，或者是字段所属class不是Public修饰，又或者是  字段是 final修饰同时又是非重写的方法
 		if ((!Modifier.isPublic(field.getModifiers()) ||
 				!Modifier.isPublic(field.getDeclaringClass().getModifiers()) ||
 				Modifier.isFinal(field.getModifiers())) && !field.isAccessible()) {

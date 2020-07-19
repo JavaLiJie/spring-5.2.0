@@ -228,7 +228,7 @@ class ConstructorResolver {
 								paramNames = pnd.getParameterNames(candidate);
 							}
 						}
-						//创建参数数组
+						//创建参数数组--如果参数不使用@Autowired注入，使用lazy注解的，会在此被解析
 						argsHolder = createArgumentArray(beanName, mbd, resolvedValues, bw, paramTypes, paramNames,
 								getUserDeclaredConstructor(candidate), autowiring, candidates.length == 1);
 					}
@@ -865,7 +865,7 @@ class ConstructorResolver {
 		return constructor;
 	}
 
-	/**
+	/**用于解析应该自动装配的指定参数的模板方法。
 	 * Template method for resolving the specified argument which is supposed to be autowired.
 	 */
 	@Nullable
@@ -881,6 +881,7 @@ class ConstructorResolver {
 			return injectionPoint;
 		}
 		try {
+			//解析依赖
 			return this.beanFactory.resolveDependency(
 					new DependencyDescriptor(param, true), beanName, autowiredBeanNames, typeConverter);
 		}

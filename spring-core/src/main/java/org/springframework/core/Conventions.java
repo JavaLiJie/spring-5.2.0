@@ -244,6 +244,7 @@ public final class Conventions {
 		return new String(result, 0, currPos);
 	}
 
+
 	/**
 	 * Return an attribute name qualified by the given enclosing {@link Class}.
 	 * For example the attribute name '{@code foo}' qualified by {@link Class}
@@ -254,7 +255,6 @@ public final class Conventions {
 		Assert.notNull(attributeName, "'attributeName' must not be null");
 		return enclosingClass.getName() + '.' + attributeName;
 	}
-
 
 	/**
 	 * Determine the class to use for naming a variable containing the given value.

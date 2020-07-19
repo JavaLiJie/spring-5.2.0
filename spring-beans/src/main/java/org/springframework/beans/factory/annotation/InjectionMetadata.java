@@ -104,6 +104,13 @@ public class InjectionMetadata {
 		this.checkedElements = checkedElements;
 	}
 
+	/**
+	 * 将需要注入的属性注入到目标bean中
+	 * @param target
+	 * @param beanName
+	 * @param pvs
+	 * @throws Throwable
+	 */
 	public void inject(Object target, @Nullable String beanName, @Nullable PropertyValues pvs) throws Throwable {
 		Collection<InjectedElement> checkedElements = this.checkedElements;
 		Collection<InjectedElement> elementsToIterate =
@@ -220,6 +227,7 @@ public class InjectionMetadata {
 
 			if (this.isField) {
 				Field field = (Field) this.member;
+				//通过反射工具类，设置字段权限为可访问
 				ReflectionUtils.makeAccessible(field);
 				field.set(target, getResourceToInject(target, requestingBeanName));
 			}
@@ -229,6 +237,7 @@ public class InjectionMetadata {
 				}
 				try {
 					Method method = (Method) this.member;
+					//通过反射工具类，设置方法权限为可访问
 					ReflectionUtils.makeAccessible(method);
 					method.invoke(target, getResourceToInject(target, requestingBeanName));
 				}

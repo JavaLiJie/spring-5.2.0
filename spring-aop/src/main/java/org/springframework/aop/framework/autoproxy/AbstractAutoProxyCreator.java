@@ -347,6 +347,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		// Create proxy if we have advice.
 		Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);
 		if (specificInterceptors != DO_NOT_PROXY) {
+			//将该类是否有通知放入缓存
 			this.advisedBeans.put(cacheKey, Boolean.TRUE);
 			//创建代理对象--》动态代理
 			Object proxy = createProxy(
@@ -445,6 +446,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			@Nullable Object[] specificInterceptors, TargetSource targetSource) {
 
 		if (this.beanFactory instanceof ConfigurableListableBeanFactory) {
+			//如果是配置类,设置beanName对应的beanDefinition的动态代理属性
 			AutoProxyUtils.exposeTargetClass((ConfigurableListableBeanFactory) this.beanFactory, beanName, beanClass);
 		}
 
@@ -453,13 +455,14 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 		if (!proxyFactory.isProxyTargetClass()) {
 			if (shouldProxyTargetClass(beanClass, beanName)) {
+				//PRESERVE_TARGET_CLASS_ATTRIBUTE类型的代理--继承类进行代理
 				proxyFactory.setProxyTargetClass(true);
 			}
-			else {
+			else {//实现接口来进行代理
 				evaluateProxyInterfaces(beanClass, proxyFactory);
 			}
 		}
-
+		//获取所有的切面
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
 		proxyFactory.addAdvisors(advisors);
 		proxyFactory.setTargetSource(targetSource);

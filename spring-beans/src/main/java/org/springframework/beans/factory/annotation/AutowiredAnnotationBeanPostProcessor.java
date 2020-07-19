@@ -434,19 +434,32 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		}
 	}
 
-
+	/**
+	 * 获取注入的数据源对象
+	 * @param beanName
+	 * @param clazz
+	 * @param pvs
+	 * @return
+	 */
 	private InjectionMetadata findAutowiringMetadata(String beanName, Class<?> clazz, @Nullable PropertyValues pvs) {
 		// Fall back to class name as cache key, for backwards compatibility with custom callers.
+		//获取类名作为缓存键
 		String cacheKey = (StringUtils.hasLength(beanName) ? beanName : clazz.getName());
 		// Quick check on the concurrent map first, with minimal locking.
+		//通过缓存键到缓存中获取注解的源信息
 		InjectionMetadata metadata = this.injectionMetadataCache.get(cacheKey);
+		//缓存中的数据为空，或者与类不一致
 		if (InjectionMetadata.needsRefresh(metadata, clazz)) {
 			synchronized (this.injectionMetadataCache) {
+				//重新根据类名获取缓存的注入类信息
 				metadata = this.injectionMetadataCache.get(cacheKey);
+				//重新判断缓存中的数据为空，或者与类不一致
 				if (InjectionMetadata.needsRefresh(metadata, clazz)) {
 					if (metadata != null) {
 						metadata.clear(pvs);
 					}
+					//找到所要注入的类，标记有 @Autowired 注解的 field和method 添加到一个list中
+					//以list和这个class封装成一个InjectionMetadata，并将其放到缓存中
 					metadata = buildAutowiringMetadata(clazz);
 					this.injectionMetadataCache.put(cacheKey, metadata);
 				}

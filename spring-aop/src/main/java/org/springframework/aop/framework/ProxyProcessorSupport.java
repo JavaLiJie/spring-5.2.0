@@ -105,8 +105,10 @@ public class ProxyProcessorSupport extends ProxyConfig implements Ordered, BeanC
 		Class<?>[] targetInterfaces = ClassUtils.getAllInterfacesForClass(beanClass, getProxyClassLoader());
 		boolean hasReasonableProxyInterface = false;
 		for (Class<?> ifc : targetInterfaces) {
+			//判断接口是合理的代理接口，同时不是GroovyObject，，这样的内部语言接口，同时接口有至少一个方法
 			if (!isConfigurationCallbackInterface(ifc) && !isInternalLanguageInterface(ifc) &&
 					ifc.getMethods().length > 0) {
+				//三个条件都满足，才为true
 				hasReasonableProxyInterface = true;
 				break;
 			}
@@ -114,10 +116,12 @@ public class ProxyProcessorSupport extends ProxyConfig implements Ordered, BeanC
 		if (hasReasonableProxyInterface) {
 			// Must allow for introductions; can't just set interfaces to the target's interfaces only.
 			for (Class<?> ifc : targetInterfaces) {
+				//为true才将接口放到代理工厂
 				proxyFactory.addInterface(ifc);
 			}
 		}
 		else {
+			//设置代理为类代理，非接口代理
 			proxyFactory.setProxyTargetClass(true);
 		}
 	}
