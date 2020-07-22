@@ -290,6 +290,9 @@ public abstract class WebApplicationContextUtils {
 	 * servlet config property source} has already been initialized)
 	 * @see org.springframework.core.env.PropertySource.StubPropertySource
 	 * @see org.springframework.core.env.ConfigurableEnvironment#getPropertySources()
+	 * 此方法是幂等的，因为它可以称为任何数字。
+	 * ，但将执行存根属性源的替换。
+	 * 对应的实际属性源只有一次。
 	 */
 	public static void initServletPropertySources(MutablePropertySources sources,
 			@Nullable ServletContext servletContext, @Nullable ServletConfig servletConfig) {
