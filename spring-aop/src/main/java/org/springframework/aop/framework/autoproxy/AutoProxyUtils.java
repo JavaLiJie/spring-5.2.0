@@ -33,7 +33,7 @@ import org.springframework.util.StringUtils;
  */
 public abstract class AutoProxyUtils {
 
-	/**可以指示是否应使用给定的Bean与目标类一起被代理---通过继承类完成代理
+	/**是否应使用给定的Bean与目标类一起被代理---通过继承类完成代理
 	 * Bean definition attribute that may indicate whether a given bean is supposed
 	 * to be proxied with its target class (in case of it getting proxied in the first
 	 * place). The value is {@code Boolean.TRUE} or {@code Boolean.FALSE}.
@@ -115,6 +115,7 @@ public abstract class AutoProxyUtils {
 
 		if (beanName != null && beanFactory.containsBeanDefinition(beanName)) {
 			//setAttribute(AutoProxyUtils.originalTargetClass,beanClass)
+			//指定bean的beanFactory的属性为originalTargetClass，即通过实现接口完成代理
 			beanFactory.getMergedBeanDefinition(beanName).setAttribute(ORIGINAL_TARGET_CLASS_ATTRIBUTE, targetClass);
 		}
 	}
