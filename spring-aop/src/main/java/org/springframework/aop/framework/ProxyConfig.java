@@ -134,6 +134,9 @@ public class ProxyConfig implements Serializable {
 	 * <p>When a config is frozen, no advice changes can be made. This is
 	 * useful for optimization, and useful when we don't want callers to
 	 * be able to manipulate configuration after casting to Advised.
+	 * 设置后无法修改
+	 * frozen冻结配置后，将无法更改通知。
+	 * 这对于优化很有用，当不希望调用者在转换为Advised之后还操纵配置时有用。
 	 */
 	public void setFrozen(boolean frozen) {
 		this.frozen = frozen;

@@ -454,6 +454,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 		//创建代理工厂
 		ProxyFactory proxyFactory = new ProxyFactory();
+		//将AbstractAutoProxyCreator属性复制到代理工厂
 		proxyFactory.copyFrom(this);
 
 		if (!proxyFactory.isProxyTargetClass()) {
@@ -465,12 +466,13 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 				evaluateProxyInterfaces(beanClass, proxyFactory);
 			}
 		}
-		//获取所有的切面
+		//将所有的通知specificInterceptors转换格式
+		// (InstantiationModelAwarePointcutAdvisor实例化模板切面-->Advisor)
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
 		proxyFactory.addAdvisors(advisors);
 		proxyFactory.setTargetSource(targetSource);
 		customizeProxyFactory(proxyFactory);
-
+		//frozen冻结配置后，将无法更改通知。默认为false
 		proxyFactory.setFrozen(this.freezeProxy);
 		if (advisorsPreFiltered()) {
 			proxyFactory.setPreFiltered(true);
@@ -507,7 +509,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		return false;
 	}
 
-	/**
+	/**确定给定bean的顾问程序，包括适用于Advisor接口的特定拦截器以及公共拦截器。
 	 * Determine the advisors for the given bean, including the specific interceptors
 	 * as well as the common interceptor, all adapted to the Advisor interface.
 	 * @param beanName the name of the bean

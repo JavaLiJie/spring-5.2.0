@@ -47,20 +47,24 @@ import org.springframework.aop.SpringProxy;
 public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
 
 	//动态代理的选项：Cjlib还是jdk动态代理
+	//如果@EnableAspectJAutoProxy设置为true--》Cglib代理
 	@Override
 	public AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException {
+		//是否优化isOptimize默认false
 		if (config.isOptimize() || config.isProxyTargetClass() || hasNoUserSuppliedProxyInterfaces(config)) {
+			//如果是CGlib的这里拿到的就是接口的实现类。
 			Class<?> targetClass = config.getTargetClass();
 			if (targetClass == null) {
 				throw new AopConfigException("TargetSource cannot determine target class: " +
 						"Either an interface or a target is required for proxy creation.");
 			}
 			if (targetClass.isInterface() || Proxy.isProxyClass(targetClass)) {
+				//目标类是接口，或者代理类是继承Proxy实现代理的
 				return new JdkDynamicAopProxy(config);
 			}
 			return new ObjenesisCglibAopProxy(config);
 		}
-		else {
+		else {//@EnableAspectJAutoProxy设置为false
 			return new JdkDynamicAopProxy(config);
 		}
 	}
