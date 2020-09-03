@@ -46,7 +46,7 @@ public class TransactionManagementConfigurationSelector extends AdviceModeImport
 	@Override
 	protected String[] selectImports(AdviceMode adviceMode) {
 		switch (adviceMode) {
-			case PROXY:
+			case PROXY://是spring默认的通知模式
 				return new String[] {
 						//动态代理注册，通过后置处理器
 						AutoProxyRegistrar.class.getName(),
@@ -54,7 +54,7 @@ public class TransactionManagementConfigurationSelector extends AdviceModeImport
 			case ASPECTJ:
 				return new String[] {
 						//通过Transactional和对应的类加载器创建实例，
-						//如果成功了，就装配AspectJJtaTransactionManagementConfiguration
+						//如果成功了，就装配分布式事务AspectJJtaTransactionManagementConfiguration
 						//失败了就装配AspectJTransactionManagementConfiguration
 						determineTransactionAspectClass()};
 			default:

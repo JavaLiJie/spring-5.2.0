@@ -49,6 +49,7 @@ public interface TransactionStatus extends TransactionExecution, SavepointManage
 	 * @see #rollbackToSavepoint(Object)
 	 * @see #releaseSavepoint(Object)
 	 */
+	//返回此事务是否在内部携带保存点，即是否已基于保存点创建为嵌套事务
 	boolean hasSavepoint();
 
 	/**
@@ -60,6 +61,7 @@ public interface TransactionStatus extends TransactionExecution, SavepointManage
 	 * depending on the underlying resource.
 	 */
 	@Override
+	//如果适用，将基础会话刷新到数据存储区：例如，所有受影响的Hibernate / JPA会话。
 	void flush();
 
 }

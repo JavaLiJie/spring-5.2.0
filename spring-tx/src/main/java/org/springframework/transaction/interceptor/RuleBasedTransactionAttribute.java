@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.springframework.lang.Nullable;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * TransactionAttribute implementation that works out whether a given exception

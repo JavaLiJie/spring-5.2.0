@@ -52,7 +52,7 @@ public interface SavepointManager {
 	 */
 	Object createSavepoint() throws TransactionException;
 
-	/**
+	/**回滚到给定的保存点。
 	 * Roll back to the given savepoint.
 	 * <p>The savepoint will <i>not</i> be automatically released afterwards.
 	 * You may explicitly call {@link #releaseSavepoint(Object)} or rely on
@@ -65,7 +65,7 @@ public interface SavepointManager {
 	 */
 	void rollbackToSavepoint(Object savepoint) throws TransactionException;
 
-	/**
+	/**明确释放给定的保存点。
 	 * Explicitly release the given savepoint.
 	 * <p>Note that most transaction managers will automatically release
 	 * savepoints on transaction completion.

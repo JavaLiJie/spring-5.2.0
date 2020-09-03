@@ -34,6 +34,7 @@ public enum Propagation {
 	 * Analogous to EJB transaction attribute of the same name.
 	 * <p>This is the default setting of a transaction annotation.
 	 */
+	//当前无事务：新建事务  当前有事务：使用当前事务
 	REQUIRED(TransactionDefinition.PROPAGATION_REQUIRED),
 
 	/**
@@ -47,12 +48,14 @@ public enum Propagation {
 	 * the actual synchronization configuration of the transaction manager.
 	 * @see org.springframework.transaction.support.AbstractPlatformTransactionManager#setTransactionSynchronization
 	 */
+	//当前无事务：不使用事务  当前有事务：使用当前事务
 	SUPPORTS(TransactionDefinition.PROPAGATION_SUPPORTS),
 
 	/**
 	 * Support a current transaction, throw an exception if none exists.
 	 * Analogous to EJB transaction attribute of the same name.
 	 */
+	//当前无事务：抛出异常  当前有事务：使用当前事务
 	MANDATORY(TransactionDefinition.PROPAGATION_MANDATORY),
 
 	/**
@@ -65,6 +68,8 @@ public enum Propagation {
 	 * made available to it (which is server-specific in standard Java EE).
 	 * @see org.springframework.transaction.jta.JtaTransactionManager#setTransactionManager
 	 */
+	//当前无事务：新建事务
+	//当前有事务：挂起当前事务并新建事务
 	REQUIRES_NEW(TransactionDefinition.PROPAGATION_REQUIRES_NEW),
 
 	/**
@@ -77,23 +82,30 @@ public enum Propagation {
 	 * made available to it (which is server-specific in standard Java EE).
 	 * @see org.springframework.transaction.jta.JtaTransactionManager#setTransactionManager
 	 */
+//	当前无事务：不使用事务
+//	当前有事务：挂起当前事务
 	NOT_SUPPORTED(TransactionDefinition.PROPAGATION_NOT_SUPPORTED),
 
 	/**
 	 * Execute non-transactionally, throw an exception if a transaction exists.
 	 * Analogous to EJB transaction attribute of the same name.
 	 */
+//	当前无事务：不使用事务
+//	当前有事务：抛出异常
 	NEVER(TransactionDefinition.PROPAGATION_NEVER),
 
 	/**
 	 * Execute within a nested transaction if a current transaction exists,
-	 * behave like {@code REQUIRED} otherwise. There is no analogous feature in EJB.
-	 * <p>Note: Actual creation of a nested transaction will only work on specific
-	 * transaction managers. Out of the box, this only applies to the JDBC
-	 * DataSourceTransactionManager. Some JTA providers might support nested
-	 * transactions as well.
+	 * 	 * behave like {@code REQUIRED} otherwise. There is no analogous feature in EJB.
+	 * 	 * <p>Note: Actual creation of a nested transaction will only work on specific
+	 * 	 * transaction managers. Out of the box, this only applies to the JDBC
+	 * 	 * DataSourceTransactionManager. Some JTA providers might support nested
+	 * 	 * transactions as well.
 	 * @see org.springframework.jdbc.datasource.DataSourceTransactionManager
 	 */
+//	当前无事务：新建事务
+//	当前有事务：嵌套事务  仅适用于JDBC DataSourceTransactionManager。一些JTA可能支持嵌套
+//
 	NESTED(TransactionDefinition.PROPAGATION_NESTED);
 
 

@@ -662,41 +662,52 @@ class CglibAopProxy implements AopProxy, Serializable {
 		@Nullable
 		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
 			Object oldProxy = null;
+			//默认为false
 			boolean setProxyContext = false;
 			Object target = null;
+			//TargetSource用于获取的当前“目标”一个AOP调用，如果没有，将通过反射调用
 			TargetSource targetSource = this.advised.getTargetSource();
 			try {
+				//是否开启exposeProxy
 				if (this.advised.exposeProxy) {
-					// Make invocation available if necessary.
+					// 如果开启了就会将代理对象放到aop上下文，并赋值给oldProxy
 					oldProxy = AopContext.setCurrentProxy(proxy);
 					setProxyContext = true;
 				}
 				// Get as late as possible to minimize the time we "own" the target, in case it comes from a pool...
+				//返回一个目标实例。(返回包含连接点的目标对象，在调用AOP方法时的调用目标。)
 				target = targetSource.getTarget();
 				Class<?> targetClass = (target != null ? target.getClass() : null);
+				//获取所有切面拦截(有顺序)
 				List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
 				Object retVal;
 				// Check whether we only have one InvokerInterceptor: that is,
 				// no real advice, but just reflective invocation of the target.
+				//如果没有切面并且还是被public修饰
 				if (chain.isEmpty() && Modifier.isPublic(method.getModifiers())) {
 					// We can skip creating a MethodInvocation: just invoke the target directly.
 					// Note that the final invoker must be an InvokerInterceptor, so we know
 					// it does nothing but a reflective operation on the target, and no hot
 					// swapping or fancy proxying.
+					//直接通过反射调用方法，不用代理
 					Object[] argsToUse = AopProxyUtils.adaptArgumentsIfNecessary(method, args);
 					retVal = methodProxy.invoke(target, argsToUse);
 				}
 				else {
 					// We need to create a method invocation...
+					//创建一个方法CglibMethodInvocation代理执行器
 					retVal = new CglibMethodInvocation(proxy, target, method, args, targetClass, chain, methodProxy).proceed();
 				}
+				//处理校验返回值
 				retVal = processReturnType(proxy, target, method, retVal);
 				return retVal;
 			}
 			finally {
 				if (target != null && !targetSource.isStatic()) {
+					//如果类不为空且不是静态的，就需要移除目标类
 					targetSource.releaseTarget(target);
 				}
+				//如果前面开启了expose代理，最终就需要将oldProxy设置为当前代理对象
 				if (setProxyContext) {
 					// Restore old proxy.
 					AopContext.setCurrentProxy(oldProxy);

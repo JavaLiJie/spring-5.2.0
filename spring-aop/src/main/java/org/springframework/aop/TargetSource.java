@@ -54,7 +54,11 @@ public interface TargetSource extends TargetClassAware {
 	 */
 	boolean isStatic();
 
-	/**
+	/**返回一个目标实例。在紧接
+	 * AOP框架调用AOP方法调用的“目标”。
+	 * 返回包含连接点的目标对象，
+	 *或{@code null}如果没有实际的目标实例
+	 * 如果无法解析目标对象，将引发异常
 	 * Return a target instance. Invoked immediately before the
 	 * AOP framework calls the "target" of an AOP method invocation.
 	 * @return the target object which contains the joinpoint,
