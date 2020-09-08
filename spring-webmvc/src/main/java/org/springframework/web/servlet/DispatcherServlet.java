@@ -1022,6 +1022,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				multipartRequestParsed = (processedRequest != request);
 
 				// Determine handler for the current request.
+				//针对不同的请求，通过handlermapping获取对应的handler
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {
 					noHandlerFound(processedRequest, response);
@@ -1029,6 +1030,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 
 				// Determine handler adapter for the current request.
+				//根据获取的handler找到对应的处理器适配器
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
 				// Process last-modified header, if supported by the handler.
@@ -1139,8 +1141,9 @@ public class DispatcherServlet extends FrameworkServlet {
 			// Concurrent handling started during a forward
 			return;
 		}
-
+		//已经处理了异常(如果有)
 		if (mappedHandler != null) {
+			//已经处理了异常(如果有)..完成后的触发方法
 			// Exception (if any) is already handled..
 			mappedHandler.triggerAfterCompletion(request, response, null);
 		}

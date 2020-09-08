@@ -549,7 +549,7 @@ public abstract class ReflectionUtils {
 		return false;
 	}
 
-	/**
+	/**使给定的方法可访问，如果必要的
 	 * Make the given method accessible, explicitly setting it accessible if
 	 * necessary. The {@code setAccessible(true)} method is only called
 	 * when actually necessary, to avoid unnecessary conflicts with a JVM
